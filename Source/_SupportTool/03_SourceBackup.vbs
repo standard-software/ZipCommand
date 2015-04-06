@@ -36,16 +36,26 @@ Sub Main
     '・設定読込
     '------------------------------
     Dim BackupSourceFolderPaths: BackupSourceFolderPaths = _
-        IniFile.ReadString("Option", "BackupSourceFolderPaths", "..\..\Source")
+        IniFile.ReadString("SourceBackup", "BackupSourceFolderPaths", "")
+    If BackupSourceFolderPaths = "" Then
+        WScript.Echo _
+            "設定が読み取れていません"
+        Exit Sub
+    End If
 
     Dim BackupDestFolderPaths: BackupDestFolderPaths = _
-        IniFile.ReadString("Option", "BackupDestFolderPaths", "..\..\Backup\Source")
+        IniFile.ReadString("SourceBackup", "BackupDestFolderPaths", "")
+    If BackupDestFolderPaths = "" Then
+        WScript.Echo _
+            "設定が読み取れていません"
+        Exit Sub
+    End If
     'BackupSourceFolderPaths と BackupDestFolderPaths は
     'カンマ区切りで同じ個数のフォルダ指定とする
 
     Dim BackupFolderLastYYYY_MM_DD: BackupFolderLastYYYY_MM_DD = _
-        IniFile.ReadString("Option", "BackupFolderLastYYYY_MM_DD", "True")
-    If UCase(BackupFolderLastYYYY_MM_DD) = "TRUE" Then
+        IniFile.ReadString("SourceBackup", "BackupFolderLastYYYY_MM_DD", "True")
+    If LCase(BackupFolderLastYYYY_MM_DD) = "true" Then
         BackupFolderLastYYYY_MM_DD = True
     Else
         BackupFolderLastYYYY_MM_DD = False
