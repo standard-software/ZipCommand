@@ -3,7 +3,7 @@
 '
 'ModuleName:    UnCompressZip.vbs
 '--------------------------------------------------
-'version        2015/02/19
+'Version:       2015/03/18
 '--------------------------------------------------
 
 Option Explicit
@@ -42,9 +42,11 @@ Do
         Call UnZip(ZipFilePath, UnCompressFolderPath)
     Else
         Call WScript.Echo("Error:ArgsCount")
+        Exit Do
     End IF
 
-    Call WScript.echo("Finish UnCompressZip")
+    Call WScript.echo( _
+        "Finish " + WScript.ScriptName)
 Loop While False
 End Sub
 
