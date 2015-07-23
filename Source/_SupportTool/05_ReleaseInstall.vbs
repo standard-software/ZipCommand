@@ -1,21 +1,18 @@
 Option Explicit
 
 '--------------------------------------------------
-'■Include Standard Software Library
+'■Include st.vbs
 '--------------------------------------------------
-'FileNameには相対アドレスも指定可能
-'--------------------------------------------------
-'Include ".\Test\..\..\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs"  
-Call Include(".\Lib\StandardSoftwareLibrary.vbs")
-
 Sub Include(ByVal FileName)
     Dim fso: Set fso = WScript.CreateObject("Scripting.FileSystemObject") 
     Dim Stream: Set Stream = fso.OpenTextFile( _
         fso.GetParentFolderName(WScript.ScriptFullName) _
         + "\" + FileName, 1)
-    ExecuteGlobal Stream.ReadAll() 
+    Call ExecuteGlobal(Stream.ReadAll())
     Call Stream.Close
 End Sub
+'--------------------------------------------------
+Call Include(".\Lib\st.vbs")
 '--------------------------------------------------
 
 '------------------------------
@@ -51,6 +48,12 @@ Sub Main
         Exit Sub
     End If
 
+    Dim InstallFolderName: InstallFolderName = _
+        IniFile.ReadString("ReleaseInstall", "InstallFolderName", "")
+
+    Dim IgnoreFiles: IgnoreFiles = _
+        IniFile.ReadString("ReleaseInstall", "InstallIgnoreFiles", "")
+
     Dim OverWriteIgnoreFiles: OverWriteIgnoreFiles = _
         IniFile.ReadString("ReleaseInstall", "InstallOverWriteIgnoreFiles", "")
     '--------------------
@@ -67,7 +70,7 @@ Sub Main
     Dim InstallFolderPath: InstallFolderPath = _
         PathCombine(Array( _
             InstallParentFolderPath, _
-            ProjectName))
+            IIF(InstallFolderName="", ProjectName, InstallFolderName)))
 
     If not fso.FolderExists(ReleaseFolderPath) Then
         WScript.Echo _
@@ -83,8 +86,9 @@ Sub Main
         Exit Sub
     End If
 
-    Call CopyFolderOverWriteIgnorePath( _
-        ReleaseFolderPath, InstallFolderPath, OverWriteIgnoreFiles)
+    Call CopyFolderIgnorePath( _
+        ReleaseFolderPath, InstallFolderPath, _
+        IgnoreFiles, OverWriteIgnoreFiles)
 
     MessageText = MessageText + _
         fso.GetFileName(InstallFolderPath) + vbCrLf

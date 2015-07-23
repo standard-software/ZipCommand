@@ -1,30 +1,28 @@
 '--------------------------------------------------
-'Standard Software Library For VBScript
-'
-'ModuleName:    UnCompressZip.vbs
+'ZipUnCompress
 '--------------------------------------------------
-'Version:       2015/03/18
+'ModuleName:    ZipUnCompress.vbs
+'--------------------------------------------------
+'Version:       2015/07/24
 '--------------------------------------------------
 
 Option Explicit
 
 '--------------------------------------------------
-'■Include Standard Software Library
+'■Include st.vbs
 '--------------------------------------------------
-'FileNameには相対アドレスも指定可能
-'--------------------------------------------------
-'Include ".\Test\..\..\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs"  
-Call Include(".\Lib\StandardSoftwareLibrary.vbs")
-
 Sub Include(ByVal FileName)
     Dim fso: Set fso = WScript.CreateObject("Scripting.FileSystemObject") 
     Dim Stream: Set Stream = fso.OpenTextFile( _
         fso.GetParentFolderName(WScript.ScriptFullName) _
         + "\" + FileName, 1)
-    ExecuteGlobal Stream.ReadAll() 
+    Call ExecuteGlobal(Stream.ReadAll())
     Call Stream.Close
 End Sub
 '--------------------------------------------------
+Call Include(".\Lib\st.vbs")
+'--------------------------------------------------
+
 
 Call Main
 

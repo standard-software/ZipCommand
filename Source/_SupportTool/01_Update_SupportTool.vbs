@@ -1,21 +1,18 @@
 Option Explicit
 
 '--------------------------------------------------
-'■Include Standard Software Library
+'■Include st.vbs
 '--------------------------------------------------
-'FileNameには相対アドレスも指定可能
-'--------------------------------------------------
-'Include ".\Test\..\..\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs"  
-Call Include(".\Lib\StandardSoftwareLibrary.vbs")
-
 Sub Include(ByVal FileName)
     Dim fso: Set fso = WScript.CreateObject("Scripting.FileSystemObject") 
     Dim Stream: Set Stream = fso.OpenTextFile( _
         fso.GetParentFolderName(WScript.ScriptFullName) _
         + "\" + FileName, 1)
-    ExecuteGlobal Stream.ReadAll() 
+    Call ExecuteGlobal(Stream.ReadAll())
     Call Stream.Close
 End Sub
+'--------------------------------------------------
+Call Include(".\Lib\st.vbs")
 '--------------------------------------------------
 
 '------------------------------
@@ -42,6 +39,9 @@ Sub Main
             "設定が読み取れていません"
         Exit Sub
     End If
+
+    Dim SupportTool_IgnoreFile: SupportTool_IgnoreFile = _
+        IniFile.ReadString("Update_SupportTool", "SupportToolIgnoreFiles", "")
     '--------------------
 
     Dim SourceFolderPath: SourceFolderPath = _
@@ -70,8 +70,9 @@ Sub Main
         DestFolderPath, "*.vbs")
 
     Call CopyFolderIgnorePath( _
-        SourceFolderPath, DestFolderPath, "*.ini,Update_HereLib.vbs")
-
+        SourceFolderPath, DestFolderPath, _
+        StringCombine(",", Array("*.ini", "Update_HereLib.vbs", SupportTool_IgnoreFile)), _
+        "")
 
     MessageText = MessageText + _
         DestFolderPath + vbCrLf

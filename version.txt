@@ -12,3 +12,5 @@
 ◇2015/03/17    ver 2.0.0
 ・  UnCompressZip.vbsからZipUnCompress.vbsに名前変更
 ・  ZipCompress.vbs作成
+◇2015/07/24    ver 2.1.0
+・  st_vbs対応
